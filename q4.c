@@ -1,8 +1,11 @@
 //gcc 5.4.0
 
-#include <stdio.h>
-#include <stdlib.h>
-#include  <sys/types.h>
+#include<stdio.h> 
+#include<stdlib.h> 
+#include<unistd.h> 
+#include<sys/types.h> 
+#include<string.h> 
+#include<sys/wait.h> 
 
 int Sum(int a[],int start,int end)
 {
@@ -13,11 +16,20 @@ int Sum(int a[],int start,int end)
 }
 
 int main() {
+    
+    int fd1[2];
+    int fd2[2];
  
     int arr[1000],sum[10]={0},fSum=0;
   for (int c = 0; c < 1000; c++)
     arr[c]= rand() % 9 + 1;
     
+    if(pipe(fd1)==-1)
+    {
+        printf("Pipe Failed!");
+    }
+    else
+    {
     sum[9]=Sum(arr,400,500);  
     int pid=fork();
     if(pid==0)
@@ -59,6 +71,7 @@ int main() {
         {
             sum[8]=Sum(arr,500,600);
         }
+    }
     }
     if(pid>0)
        {
